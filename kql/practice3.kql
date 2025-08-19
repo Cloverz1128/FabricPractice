@@ -1,0 +1,14 @@
+//https://dataexplorer.azure.com/clusters/help/databases/Samples -> NYC Taxi
+
+Trips
+| limit 10000
+| project pickup_boroname, pickup_ntaname, dropoff_boroname, dropoff_ntaname
+| order by pickup_boroname asc, pickup_ntaname asc, dropoff_boroname asc, dropoff_ntaname asc
+| where pickup_boroname != ""
+| extend pickup = strcat_delim(" ", pickup_boroname, pickup_ntaname),
+         dropoff = strcat_delim(" ", dropoff_boroname, dropoff_ntaname)
+| extend eastIndex = indexof(pickup, "East")
+| where eastIndex != -1
+| extend pickupBefore = trim(":", substring(pickup, 0, eastIndex)), NumCharNeeded = strlen(pickup)-eastIndex-4
+| extend pickupAfter = trim(":", substring(pickup, eastIndex + 4, NumCharNeeded))
+| extend dropoff = replace_string(dropoff, "East", "West")

@@ -1,0 +1,32 @@
+Weather
+| join kind = fullouter
+(Region | extend State = toupper(State))
+on ($left.State == $right.State)
+| project State, Region
+// duplicates:
+// option 1: distinct
+// | distinct State, Region
+// option 2: summarize
+// | summarize by State, Region
+// option 3: summarize and count, show duplicates lines
+| summarize Count = count() by State, Region
+| where Count > 1;
+
+Weather
+| join kind = fullouter
+(Region | extend State = toupper(State))
+on ($left.State == $right.State)
+| project State, Region
+// missing / null values
+// option 1: 
+// | where State == ""
+// option 2: 
+// | where State == "" or isnull(State)
+// option 3: same logic above
+| where coalesce(State, "") == ""; 
+
+Weather
+| join kind = leftouter // leftanti, rightanti
+(Region | extend State = toupper(State))
+on ($left.State == $right.State)
+| project State, Region;

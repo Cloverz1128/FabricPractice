@@ -1,0 +1,47 @@
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType == "Heavy Rain"; // case sensitive
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType =~ "heavy rain"; // case insensitive, take longer time to execute
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType != "Heavy Rain"; // case sensitive, not equal
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType !~ "heavy rain"; // case insensitive, not equal
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where not(EventType == "Heavy Rain"); // case sensitive
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType == "Heavy Rain" or EventType == "Blizzard";
+
+Weather
+| project Narrative = EpisodeNarrative, EventType, State
+| where State == "TEXAS" and (EventType == "Heavy Rain" or EventType == "Blizzard");
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType in ("Heavy Rain", "Blizzard");
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType in~ ("Heavy Rain", "Blizzard"); // case insensitive
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType =~ "Heavy Rain" or EventType =~ "Blizzard";  // case insensitive
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where EventType !in~ ("Heavy Rain", "Blizzard");
+
+Weather
+| project Narrative = EpisodeNarrative, EventType
+| where not(EventType =~ "Heavy Rain" or EventType =~ "Blizzard");

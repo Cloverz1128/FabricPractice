@@ -1,0 +1,58 @@
+Weather
+| distinct State, EventType
+| union 
+(Weather
+| distinct State, EventNarrative);
+
+Weather
+| distinct State, EventType
+| union kind=inner 
+(Weather
+| distinct State, EventNarrative);
+
+
+Weather
+| distinct State, EventType
+| union kind=outer withsource=TableSource
+(Weather
+| distinct State, EventNarrative)
+
+union withsource=AdditionalColumn Wea*
+
+Weather
+| join
+(Region | extend State = toupper(State))
+on ($left.State == $right.State)
+
+// 修正大小写后其实这样也会有结果
+Weather
+| join
+(Region | extend State = toupper(State))
+on State
+
+// join kind 默认是 innerunique
+Weather
+| join kind = innerunique
+(Region | extend State = toupper(State))
+on State
+
+// 修改join kind 后会有57522条数据
+Weather
+| join kind = inner
+(Region | extend State = toupper(State))
+on State
+
+// 修改join kind = leftouter 后会有59066条数据
+// fullouter 59067条数据
+Weather
+| join kind = leftouter
+(Region | extend State = toupper(State))
+on State
+
+// 和leftouter一样有59066条数据
+// lookup kind = leftouter 默认是leftouter
+// 如果用这个 smaller table should be right table
+Weather
+| join lookup
+(Region | extend State = toupper(State))
+on State

@@ -1,0 +1,36 @@
+Weather
+| distinct State;
+
+Weather
+| summarize by State;
+
+Weather
+| summarize Calc=count() by State, EventType;
+
+Weather
+| summarize Calc=countif(EventType  == "Flood") by State, EventType;
+
+Weather
+| summarize Calc=countif(EventType  != "Flood") by State, EventType;
+
+Weather
+| summarize Calc=countif(EventType  =~ "flood") by State, EventType;
+
+Weather
+| where  State in~("Texas", "Kansas", "Alaska") // better to put filter before
+| summarize Calc=countif(EventType  =~ "flood") by State, EventType
+| where Calc >= 100; // less then/ greater then can only used for numbers and dates, can not for strings
+                     // this where similar to having
+
+Weather
+| summarize Calc=sum(InjuriesDirect) by State; // also could use max(), avg(), min()
+
+Weather
+| summarize Calc=avgif(InjuriesDirect, EventType == "Flood") by State; // calculate InjuriesDirect caused by Flood
+// also could use maxif(), avgif(), minif()
+
+Weather
+| summarize Calc = dcount(EventType) by State; // in each state how many different EventTypes
+
+Weather
+| summarize Calc = count_distinct(EventType) by State; // in each state how many different EventTypes

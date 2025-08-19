@@ -1,0 +1,17 @@
+//https://dataexplorer.azure.com/clusters/help/databases/Samples -> Storm_Events
+
+StormEvents
+| summarize NumberOfEvents = count() by State
+| extend  TexasOrFlorida = iif(State == "TEXAS" or State == "FLORIDA", "Texas/Florida", "Other" )
+
+StormEvents
+| summarize NumberOfEvents = count() by State
+| extend  TexasOrFlorida = iif(State in ("TEXAS", "FLORIDA"), "Texas/Florida", "Other" )
+
+StormEvents
+| summarize NumberOfEvents = count() by State
+| extend  TexasOrFlorida = case(State in ("TEXAS", "FLORIDA"), "Texas/Florida", "Other" ) // case - nested iif
+
+StormEvents
+| summarize NumberOfEvents = count() by State
+| extend  TexasOrFlorida = case(State == "TEXAS", "Texas", State == "FLORIDA", "Florida", "Other" ) // case - nested iif

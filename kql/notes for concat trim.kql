@@ -1,0 +1,30 @@
+Weather
+| project  State, EpisodeNarrative, EventType, BeginLocation
+| limit 20
+// | where BeginLocation == "" // BeginLocation is Empty
+| where isempty(BeginLocation) 
+
+Weather
+| project  State, EpisodeNarrative, EventType, BeginLocation
+| extend Calc = strcat(EventType, ":", EpisodeNarrative) // similar concat in sql
+| limit 20
+
+Weather
+| project  State, EpisodeNarrative, EventType, BeginLocation
+| extend Calc = strcat_delim(":", State, EventType, EpisodeNarrative) // similar join in python
+| limit 20
+
+Weather
+| project  State, EpisodeNarrative, EventType, BeginLocation, EventId
+| extend EventType = toupper(EventType) // make value of EventType to uppercase, also have tolower()
+| extend Calc = strcat_delim(":", EventId, State, EventType, EpisodeNarrative) // similar join in python
+| limit 20
+
+
+Weather
+| project  State, BeginLocation, EndLocation
+| extend Calc = trim(" ", strcat_delim(" ", BeginLocation, State, EndLocation)) 
+//also can use ' ', trim is remove the symbal before and after source - second param
+// trim_start('0', account_number) i.e. account_number is '00000123'
+// trim_end
+| limit 20

@@ -1,0 +1,41 @@
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative has "county";  // has is case insensitive
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative has_cs "county";  // case sensitive
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative contains "county"; // case insensitive
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative has "cou";  // has is looking for a word of cou
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative contains "cou";  // contain cou letters
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative hasprefix "cou";  // looking for a word of start from cou
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative hasprefix "cou" // looking for a word end of cou
+| where not(EpisodeNarrative hasprefix "count")
+| where EpisodeNarrative !hasprefix "couple"; // could also add `_cs` case sensitive 
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative startswith "showers"; // Entire string start with "shower"
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative has "showers" or EpisodeNarrative has "county" ;
+
+Weather
+| project EpisodeNarrative
+| where EpisodeNarrative has_any ("showers", "county");

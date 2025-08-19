@@ -1,0 +1,48 @@
+Weather
+| distinct StartTime
+// | where StartTime >= datetime(2007-03-26) and StartTime  <= datetime(2007-04-15)
+| where StartTime between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+Weather
+| distinct StartDate = startofday(StartTime)
+| where StartDate between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+Weather
+| distinct StartDate = startofday(StartTime)
+| extend Calc = startofweek(StartDate)
+| where StartDate between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+Weather
+| distinct StartDate = startofday(StartTime)
+| extend Calc = datetime_part("week_of_year", StartDate)
+| where StartDate between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+Weather
+| distinct StartDate = startofday(StartTime)
+| extend Calc = datetime_add("day", 2, StartDate)
+| where StartDate between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+Weather
+| distinct StartTime, EndTime
+| extend Calc = EndTime - StartTime, datetime_diff('hour', EndTime, StartTime) // day
+| where StartTime between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+Weather
+| distinct StartTime, EndTime
+| extend Calc = datetime_local_to_utc(StartTime, 'Australia/Sydney')
+| where StartTime between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+Weather
+| distinct StartTime, EndTime
+| extend Calc = format_datetime(StartTime, 'd MM yyyy'),
+         Calc2 = format_timespan(EndTime - StartTime, 'ddd.hh:mm:ss')
+| where StartTime between (datetime(2007-03-26) .. datetime(2007-04-15))
+
+
+print dayofweek(now());
+
+print dow = dayofweek(now())
+| getschema
+
+print timezones = datetime_list_timezones()
+| mv-expand timezones

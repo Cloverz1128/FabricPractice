@@ -1,0 +1,24 @@
+//https://dataexplorer.azure.com/clusters/help/databases/Samples -> NYC Taxi
+
+Trips
+| project pickup_datetime, pickup_longitude, pickup_latitude, total_amount
+| where pickup_datetime between (todatetime('2014-05-01') .. todatetime('2014-05-07 23:59:59'))
+| union kind=inner 
+(
+    Trips
+    | project pickup_datetime, dropoff_longitude, pickup_latitude, total_amount
+    | where pickup_datetime between (todatetime('2014-06-01') .. todatetime('2014-06-07 23:59:59'))
+)
+
+Trips
+| extend pickupDate = startofday(pickup_datetime)
+| summarize amount = sum(total_amount) by pickup_datetime, pickupDate
+| where pickup_datetime between (todatetime('2014-05-01') .. todatetime('2014-05-07 23:59:59'))
+| join 
+(
+    Trips
+    | extend pickupDate = startofday(pickup_datetime)
+    | summarize amountDaily = sum(total_amount) by pickupDate
+)
+on $left.pickupDate == $right.pickupDate
+| extend percentage = amount / amountDaily * 100

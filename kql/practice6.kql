@@ -1,0 +1,19 @@
+Trips
+| distinct pickup = startofday(pickup_datetime), pickupWeekday = dayofweek(pickup_datetime)/1d
+| extend pickupWeekday = case(pickupWeekday == 1, "Monday",
+                              pickupWeekday == 2, "Tuesday",
+                              pickupWeekday == 3, "Wednsday",
+                              pickupWeekday == 4, "Thursday",
+                              pickupWeekday == 5, "Friday",
+                              pickupWeekday == 6, "Saturday",
+                              pickupWeekday == 6, "Sunday",
+                              "Error")
+| order by pickup asc;
+
+Trips
+| limit 10000
+| project pickup_boroname, dropoff_boroname
+| summarize by pickup_boroname, dropoff_boroname 
+| extend boro = coalesce(pickup_boroname, dropoff_boroname);
+// | extend boro=iif(isnull(pickup_boroname), dropoff_boroname, pickup_boroname);
+

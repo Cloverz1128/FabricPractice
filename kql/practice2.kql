@@ -1,0 +1,19 @@
+//https://dataexplorer.azure.com/clusters/help/databases/Samples -> NYC Taxi
+
+Trips
+| take 10000
+| project dropoff=dropoff_boroname, pickup=pickup_boroname, amount=total_amount, distance=trip_distance
+| order by dropoff asc, pickup asc, amount asc, distance asc
+| where dropoff =~ "Bronx"
+// | where dropoff startswith "Bron"
+// | where dropoff has_any("Bronx", "Manhattan")
+// | where dropoff == "Bronx" and pickup == "Manhattan"
+
+Trips
+| take 10000
+| project dropoff=dropoff_boroname, pickup=pickup_boroname, amount=total_amount, distance=trip_distance
+| summarize totalamount = sum(amount), totaldistance = sum(distance), 
+  highestamount=max(amount), numberofrows=count(), 
+  ManhattanAmount= sumif(amount, dropoff == "Manhattan")
+  by dropoff, pickup
+| order by dropoff asc, pickup asc

@@ -1,0 +1,17 @@
+//https://dataexplorer.azure.com/clusters/help/databases/Samples -> NYC Taxi
+
+Trips
+| limit 10000
+| project total_amount, dropoff_longitude = todouble(dropoff_longitude), 
+          pickup_longitude = todouble(pickup_longitude), 
+          pickup_datetime, dropoff_datetime
+| extend amount = round(total_amount, 0), 
+         distance = abs(dropoff_longitude - pickup_longitude),
+         duration = dropoff_datetime - pickup_datetime
+| extend direction = sign(distance),
+         pickupDate = startofday(pickup_datetime)
+| extend pickupDay = dayofweek(pickupDate)
+| summarize totalAmount = sum(amount),
+            totalDistance = sum(distance),
+            totalDuration = sum(duration) 
+            by pickupDate, pickupDay

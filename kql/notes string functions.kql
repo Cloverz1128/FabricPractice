@@ -1,0 +1,22 @@
+Weather
+| distinct EventType
+| extend FindSpace = indexof(EventType, " "), BeforeSpace = substring(EventType, 0, 5)
+
+Weather
+| distinct EventType
+| extend FindSpace = indexof(strcat(EventType, " "), " ")
+| extend BeforeSpace = substring(EventType, 0, FindSpace)
+| extend AfterSpace = substring(EventType, FindSpace + 1, 999)
+
+Weather
+| distinct EventType
+| extend FindSpace = indexof(strcat(EventType, " "), " ")
+| extend BeforeSpace = substring(EventType, 0, FindSpace), NumCharNeeded = strlen(EventType)-FindSpace-1
+| extend AfterSpace = substring(EventType, FindSpace + 1, NumCharNeeded)
+
+Weather
+| distinct EventType
+| extend EventType = replace_string(EventType, "High", "Big") // replace High to big, case sensitive
+| extend FindSpace = indexof(strcat(EventType, " "), " ")
+| extend BeforeSpace = substring(EventType, 0, FindSpace), NumCharNeeded = strlen(EventType)-FindSpace-1
+| extend AfterSpace = substring(EventType, FindSpace + 1, NumCharNeeded)

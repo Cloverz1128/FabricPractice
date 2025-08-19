@@ -1,0 +1,15 @@
+//https://dataexplorer.azure.com/clusters/help/databases/Samples -> NYC Taxi
+
+Trips
+| distinct dropoffBoro = dropoff_boroname
+| order by dropoffBoro; // defaul desc
+
+Trips
+| take 1000 // or use limit 1000
+| project dropoff_boroname, dropoff_ntaname, pickup_boroname, pickup_ntaname, trip_distance, fare_amount, total_amount
+| order by dropoff_boroname, pickup_boroname, dropoff_ntaname, pickup_ntaname asc;
+
+Trips
+| top 10 by total_amount
+| project pickupTime = pickup_datetime, dropoffTime = dropoff_datetime, distance = trip_distance, totalAmount = total_amount
+| extend duration = dropoffTime - pickupTime;
